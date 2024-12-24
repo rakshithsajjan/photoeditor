@@ -1,19 +1,28 @@
-import { Stack, Link } from 'expo-router';
+import { Link, Stack } from 'expo-router';
+import { View, StyleSheet } from 'react-native';
 
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { ScreenContent } from '~/components/ScreenContent';
+import { CameraScreen } from './(screens)/camera';
 
 export default function Home() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home" />
-        <Link href={{ pathname: '/details', params: { name: 'Dan' } }} asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
+      <Stack.Screen options={{ headerShown: false }} />
+      <View style={styles.container}>
+        <CameraScreen />
+      </View>
     </>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  link: {
+    fontSize: 16,
+    color: '#2e78b7',
+    padding: 12,
+  },
+});

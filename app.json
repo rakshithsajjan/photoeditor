@@ -2,6 +2,7 @@
   "expo": {
     "name": "ClearlyYou",
     "slug": "ClearlyYou",
+    "newArchEnabled": true,
     "version": "1.0.0",
 
     "scheme": "ClearlyYou",
