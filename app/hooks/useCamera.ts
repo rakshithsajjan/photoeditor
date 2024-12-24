@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Camera, CameraView } from 'expo-camera';
 
 export const useCamera = () => {
@@ -12,6 +12,10 @@ export const useCamera = () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status === 'granted');
     return status === 'granted';
+  };
+
+  const resetCamera = () => {
+    setCapturedImage(null);
   };
 
   const takePicture = async () => {
@@ -42,5 +46,8 @@ export const useCamera = () => {
     capturedImage,
     takePicture,
     requestPermission,
+    resetCamera,
   };
 };
+
+export default useCamera;

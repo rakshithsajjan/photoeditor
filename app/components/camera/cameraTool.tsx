@@ -1,9 +1,11 @@
 /* eslint-disable react/jsx-no-undef */
 import { CameraView } from 'expo-camera';
+import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
 import { CameraButton } from './cameraButton';
+import { ImageActionButtons } from './imageActionButtons';
 import { useCamera } from '../../hooks/useCamera';
 
 interface CameraViewProps {
@@ -11,8 +13,15 @@ interface CameraViewProps {
 }
 
 export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
-  const { hasPermission, cameraRef, takePicture, requestPermission, isCapturing, capturedImage } =
-    useCamera();
+  const {
+    hasPermission,
+    cameraRef,
+    takePicture,
+    requestPermission,
+    isCapturing,
+    capturedImage,
+    resetCamera,
+  } = useCamera();
 
   const handleCapture = async () => {
     if (!hasPermission) {
@@ -25,10 +34,20 @@ export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
     }
   };
 
+  const handleRetake = () => {
+    resetCamera();
+  };
+  const handleContinue = () => {
+    router.push('/(screens)/onboardSkinDetails');
+  };
+
   return (
     <View style={styles.container}>
       {capturedImage ? (
-        <Image source={{ uri: capturedImage }} style={styles.camera} resizeMode="cover" />
+        <>
+          <Image source={{ uri: capturedImage }} style={styles.camera} resizeMode="cover" />
+          <ImageActionButtons onRetake={handleRetake} onContinue={handleContinue} />
+        </>
       ) : hasPermission ? (
         <CameraView ref={cameraRef} style={styles.camera} facing="front" />
       ) : (

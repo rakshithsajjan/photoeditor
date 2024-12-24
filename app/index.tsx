@@ -1,14 +1,14 @@
 import { Link, Stack } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 
-import { CameraScreen } from './(screens)/camera';
+import { OnboardSelfie } from './(screens)/onboardSelife';
 
 export default function Home() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <CameraScreen />
+        <OnboardSelfie />
       </View>
     </>
   );
