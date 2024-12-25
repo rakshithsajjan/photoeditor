@@ -6,6 +6,7 @@ export default function ScreenLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="onboardSelfie" />
       <Stack.Screen name="onboardSkinDetails" />
+      <Stack.Screen name="onboardSkinProducts" />
     </Stack>
   );
 }

@@ -38,7 +38,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
     resetCamera();
   };
   const handleContinue = () => {
-    router.push('/(screens)/onboardSkinDetails');
+    router.navigate('/(screens)/onboardSkinDetails');
   };
 
   return (
@@ -89,39 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// import { CameraView as Camera } from 'expo-camera';
-// import React from 'react';
-// import { StyleSheet, View, Text } from 'react-native';
-
-// import { useCamera } from '../../hooks/useCamera';
-
-// interface CameraViewProps {
-//   onPhotoCapture: (photo: string) => void;
-// }
-
-// export const CameraView: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
-//   const { hasPermission, cameraRef } = useCamera();
-
-//   if (hasPermission === null) {
-//     return <View style={styles.container} />;
-//   }
-
-//   if (hasPermission === false) {
-//     return <Text>No access to camera</Text>;
-//   }
-
-//   return (
-//     <View style={styles.container}>
-//       <Camera ref={cameraRef} style={styles.camera} />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   camera: {
-//     flex: 1,
-//   },
-// });
+export default CameraTool;
