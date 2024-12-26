@@ -1,11 +1,18 @@
 /* eslint-disable import/order */
 import { useState, useRef } from 'react';
 import { Camera, CameraView } from 'expo-camera';
+import { useCapturedImages } from './capturedImageContext';
+
+interface CapturedImage {
+  uri: string;
+  base64: string;
+}
 
 export const useCamera = () => {
   const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const { addCapturedImage } = useCapturedImages();
   const cameraRef = useRef<CameraView>(null);
 
   const requestPermission = async () => {
@@ -16,6 +23,11 @@ export const useCamera = () => {
 
   const resetCamera = () => {
     setCapturedImage(null);
+  };
+
+  const handleAddCapturedImage = (photo: { uri: string; base64: string }) => {
+    addCapturedImage(photo);
+    resetCamera();
   };
 
   const takePicture = async () => {
@@ -47,6 +59,7 @@ export const useCamera = () => {
     takePicture,
     requestPermission,
     resetCamera,
+    handleAddCapturedImage,
   };
 };
 

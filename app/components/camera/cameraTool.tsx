@@ -10,9 +10,17 @@ import { useCamera } from '../../hooks/useCamera';
 
 interface CameraViewProps {
   onPhotoCapture: (photo: string) => void;
+  cameraFacing?: 'front' | 'back';
+  nextScreenRoute?: string;
+  placeholderText?: string;
 }
 
-export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
+export const CameraTool: React.FC<CameraViewProps> = ({
+  onPhotoCapture,
+  cameraFacing,
+  nextScreenRoute,
+  placeholderText,
+}) => {
   const {
     hasPermission,
     cameraRef,
@@ -21,6 +29,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
     isCapturing,
     capturedImage,
     resetCamera,
+    handleAddCapturedImage,
   } = useCamera();
 
   const handleCapture = async () => {
@@ -37,22 +46,43 @@ export const CameraTool: React.FC<CameraViewProps> = ({ onPhotoCapture }) => {
   const handleRetake = () => {
     resetCamera();
   };
-  const handleContinue = () => {
-    router.navigate('/(screens)/onboardSkinDetails');
+
+  const handleAdd = () => {
+    if (capturedImage) {
+      // store the current taken image
+      handleAddCapturedImage({ uri: capturedImage, base64: capturedImage });
+      resetCamera();
+    }
   };
 
+  const handleContinue = () => {
+    if (capturedImage) {
+      // store the current taken image
+      handleAddCapturedImage({ uri: capturedImage, base64: capturedImage });
+    }
+    router.push(nextScreenRoute as any);
+  };
+
+  // const capturedImagesCount = capturedImages.length + (capturedImage ? 1 : 0);
   return (
     <View style={styles.container}>
       {capturedImage ? (
         <>
           <Image source={{ uri: capturedImage }} style={styles.camera} resizeMode="cover" />
-          <ImageActionButtons onRetake={handleRetake} onContinue={handleContinue} />
+          {/* <View style={styles.imageCountContainer}>
+            <Text style={styles.imageCountText}>Images captured: {capturedImagesCount}</Text>
+          </View> */}
+          <ImageActionButtons
+            onRetake={handleRetake}
+            onAdd={handleAdd}
+            onContinue={handleContinue}
+          />
         </>
       ) : hasPermission ? (
-        <CameraView ref={cameraRef} style={styles.camera} facing="front" />
+        <CameraView ref={cameraRef} style={styles.camera} facing={cameraFacing} />
       ) : (
         <View style={styles.placeholderContainer}>
-          <Text style={styles.placeholderText}>Click the button to take a selfie</Text>
+          <Text style={styles.placeholderText}>{placeholderText}</Text>
         </View>
       )}
       <View style={styles.buttonContainer}>
@@ -86,6 +116,18 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 18,
     color: '#666',
+  },
+  imageCountContainer: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 8,
+    borderRadius: 8,
+  },
+  imageCountText: {
+    color: 'white',
+    fontSize: 14,
   },
 });
 

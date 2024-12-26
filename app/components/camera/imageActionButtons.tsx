@@ -4,14 +4,25 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface ImageActionButtonsProps {
   onRetake: () => void;
+  onAdd: () => void;
   onContinue: () => void;
 }
 
-export const ImageActionButtons: React.FC<ImageActionButtonsProps> = ({ onRetake, onContinue }) => (
+export const ImageActionButtons: React.FC<ImageActionButtonsProps> = ({
+  onRetake,
+  onAdd,
+  onContinue,
+}) => (
   <View style={styles.container}>
+    {/* retake */}
     <TouchableOpacity style={styles.button} onPress={onRetake}>
       <Ionicons name="refresh" size={28} color="#FFF" />
     </TouchableOpacity>
+    {/* add */}
+    <TouchableOpacity style={styles.button} onPress={onRetake}>
+      <Ionicons name="add" size={28} color="#FFF" />
+    </TouchableOpacity>
+    {/* continue */}
     <TouchableOpacity style={styles.button} onPress={onContinue}>
       <Ionicons name="checkmark" size={28} color="#FFF" />
     </TouchableOpacity>

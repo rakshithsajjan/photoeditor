@@ -5,14 +5,32 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 interface CameraButtonProps {
   onPress: () => void;
   disabled?: boolean;
+  buttonColor?: string;
+  iconColor?: string;
+  size?: number;
 }
 
-export const CameraButton: React.FC<CameraButtonProps> = ({ onPress, disabled = false }) => (
+export const CameraButton: React.FC<CameraButtonProps> = ({
+  onPress,
+  disabled = false,
+  buttonColor = '#2196F3',
+  iconColor = 'peachpuff',
+  size = 80,
+}) => (
   <TouchableOpacity
-    style={[styles.button, disabled && styles.disabled]}
+    style={[
+      styles.button,
+      disabled && styles.disabled,
+      {
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        backgroundColor: buttonColor,
+      },
+    ]}
     onPress={onPress}
     disabled={disabled}>
-    <Ionicons name="camera" size={32} color="peachpuff" />
+    <Ionicons name="camera" size={size * 0.4} color={iconColor} />
   </TouchableOpacity>
 );
 

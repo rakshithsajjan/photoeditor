@@ -5,14 +5,14 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
+  // SafeAreaView,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 
 import { Header } from '../components/Header';
-import InstructionText from '../components/camera/instructionText';
 import { SelectableCircle } from '../components/selectableCircle';
+import InstructionText from '../components/camera/instructionText';
 import { TYPOGRAPHY } from '../styles/typography';
 
 const windowWidth = Dimensions.get('window').width;
@@ -64,7 +64,7 @@ export const OnboardSkinDetails: React.FC = () => {
     }
 
     router.push({
-      pathname: '/onboardSkinProducts',
+      pathname: '/onboardSkinProducts1',
       // state: {
       //   skinType: selectedSkinType,
       //   skinConcerns: selectedConcerns,
