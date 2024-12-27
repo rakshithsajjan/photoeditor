@@ -8,7 +8,7 @@ import { InstructionText } from '../components/camera/instructionText';
 import { CameraTool } from '../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
-export const OnboardSkinProducts1: React.FC = () => {
+export default function CameraTab() {
   const { takePicture, isCapturing } = useCamera();
 
   return (
@@ -16,18 +16,18 @@ export const OnboardSkinProducts1: React.FC = () => {
       <StatusBar style="light" />
       <View style={styles.container}>
         <Header title="ClearlyYou" />
-        <InstructionText message="take a picture of your skin product's composition:" />
+        <InstructionText message="" />
         <CameraTool
           onPhotoCapture={takePicture}
-          cameraFacing="back"
-          nextScreenRoute="/(screens)/onboardSkinProducts2"
-          placeholderText="Click to show us your skin products composition"
+          cameraFacing="front"
+          nextScreenRoute="/home"
+          placeholderText="Take a clear picture of your skin to log your progress!"
         />
         {/* <CameraButton onPress={takePicture} disabled={isCapturing} /> */}
       </View>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -35,5 +35,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'peachpuff',
   },
 });
-
-export default OnboardSkinProducts1;

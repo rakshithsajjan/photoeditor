@@ -3,13 +3,13 @@ import React from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 
 import { Header } from '../components/Header';
-import { ImageCard } from '../components/ImageCard';
 import { InstructionText } from '../components/camera/instructionText';
+import { ImageCard } from '../components/imageCard';
 import { useCapturedImages } from '../hooks/capturedImageContext';
 import { useCamera } from '../hooks/useCamera';
 import { TYPOGRAPHY } from '../styles/typography';
 
-export const OnboardSkinProducts2: React.FC = () => {
+export const OnboardSkinProductsDisplay: React.FC = () => {
   const { capturedImages, removeCapturedImage } = useCapturedImages();
 
   const handleRemoveImage = (imageUri: string) => {
@@ -21,7 +21,7 @@ export const OnboardSkinProducts2: React.FC = () => {
       // Optionally show an alert or message
       return;
     }
-    router.push('/onboardSkinProducts1');
+    router.push('/home');
   };
 
   return (
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardSkinProducts2;
+export default OnboardSkinProductsDisplay;

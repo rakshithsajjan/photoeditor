@@ -4,7 +4,7 @@ import { Text, StyleSheet } from 'react-native';
 import { TYPOGRAPHY } from '../../styles/typography';
 
 interface InstructionTextProps {
-  message: string;
+  message?: string;
 }
 
 export const InstructionText: React.FC<InstructionTextProps> = ({ message }) => (
