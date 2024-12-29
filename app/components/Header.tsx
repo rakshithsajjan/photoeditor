@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   streak = 0,
 }) => {
   const handleProfileClick = () => {
-    router.navigate('/(screens)/profileScreen');
+    router.navigate('/(screens)/onboarded/profileScreen');
   };
   if (!isOnboarded) {
     return <Text style={styles.simpleHeader}>{title}</Text>;

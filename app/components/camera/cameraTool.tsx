@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-undef */
 import { CameraView } from 'expo-camera';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
 import { CameraButton } from './cameraButton';
@@ -32,11 +32,18 @@ export const CameraTool: React.FC<CameraViewProps> = ({
     handleAddCapturedImage,
   } = useCamera();
 
+  useEffect(() => {
+    const initializeCamera = async () => {
+      if (!hasPermission) {
+        // const granted = await requestPermission();
+        // if (!granted) return;
+        await requestPermission();
+      }
+    };
+    initializeCamera();
+  }, [hasPermission, requestPermission]);
+
   const handleCapture = async () => {
-    if (!hasPermission) {
-      const granted = await requestPermission();
-      if (!granted) return;
-    }
     const photo = await takePicture();
     if (photo?.base64) {
       onPhotoCapture(photo.base64);
@@ -69,9 +76,6 @@ export const CameraTool: React.FC<CameraViewProps> = ({
       {capturedImage ? (
         <>
           <Image source={{ uri: capturedImage }} style={styles.camera} resizeMode="cover" />
-          {/* <View style={styles.imageCountContainer}>
-            <Text style={styles.imageCountText}>Images captured: {capturedImagesCount}</Text>
-          </View> */}
           <ImageActionButtons
             onRetake={handleRetake}
             onAdd={handleAdd}
@@ -79,15 +83,17 @@ export const CameraTool: React.FC<CameraViewProps> = ({
           />
         </>
       ) : hasPermission ? (
-        <CameraView ref={cameraRef} style={styles.camera} facing={cameraFacing} />
+        <>
+          <CameraView ref={cameraRef} style={styles.camera} facing={cameraFacing} />
+          <View style={styles.buttonContainer}>
+            <CameraButton onPress={handleCapture} disabled={isCapturing} />
+          </View>
+        </>
       ) : (
         <View style={styles.placeholderContainer}>
           <Text style={styles.placeholderText}>{placeholderText}</Text>
         </View>
       )}
-      <View style={styles.buttonContainer}>
-        <CameraButton onPress={handleCapture} disabled={isCapturing} />
-      </View>
     </View>
   );
 };
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
-    paddingBottom: 24,
+    paddingBottom: 16,
   },
   placeholderContainer: {
     flex: 1,

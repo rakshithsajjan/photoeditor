@@ -1,7 +1,7 @@
 import { Link, Stack } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 
-import { OnboardSelfie } from './(screens)/onboardSelfie';
+import { OnboardSelfie } from './(screens)/onboarding/selfie';
 
 export default function Home() {
   return (

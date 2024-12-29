@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image } from 'react-native';
 
-import { TYPOGRAPHY } from '../styles/typography';
+import { TYPOGRAPHY } from '../../styles/typography';
 
 // ProfileHeader Component
 const ProfileHeader = () => (
@@ -58,7 +58,7 @@ export default function ProfileScreen({ route }: ProfileScreenProps) {
 
       {/* Profile Avatar and Info */}
       <View style={styles.profileSection}>
-        <Image source={require('../../assets/adaptive-icon.png')} style={styles.avatar} />
+        <Image source={require('../../../assets/adaptive-icon.png')} style={styles.avatar} />
         <Text style={[TYPOGRAPHY.heading1, styles.displayName]}>Butterfly</Text>
         <Text style={styles.handle}>kitten.butterfly</Text>
       </View>

@@ -2,13 +2,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useCamera } from '../hooks/useCamera';
-import { Header } from '../components/Header';
-import { InstructionText } from '../components/camera/instructionText';
-import { CameraTool } from '../components/camera/cameraTool';
+import { useCamera } from '../../hooks/useCamera';
+import { Header } from '../../components/Header';
+import { InstructionText } from '../../components/camera/instructionText';
+import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
-export const OnboardSkinProductsClick: React.FC = () => {
+export const OnboardSelfie: React.FC = () => {
   const { takePicture, isCapturing } = useCamera();
 
   return (
@@ -16,12 +16,12 @@ export const OnboardSkinProductsClick: React.FC = () => {
       <StatusBar style="light" />
       <View style={styles.container}>
         <Header title="ClearlyYou" />
-        <InstructionText message="take a picture of your skin product's composition:" />
+        <InstructionText message="Click a selfie and show off your a brilliant smile :)" />
         <CameraTool
           onPhotoCapture={takePicture}
-          cameraFacing="back"
-          nextScreenRoute="/(screens)/onboardSkinProductsDisplay"
-          placeholderText="Click to show us your skin products composition"
+          cameraFacing="front"
+          nextScreenRoute="/(screens)/onboarding/skinDetails"
+          // placeholderText="Click the button to take a selfie :)"
         />
         {/* <CameraButton onPress={takePicture} disabled={isCapturing} /> */}
       </View>
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardSkinProductsClick;
+export default OnboardSelfie;

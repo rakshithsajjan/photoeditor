@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { Header } from '../components/Header';
-import InstructionText from '../components/camera/instructionText';
-import { SelectableCircle } from '../components/selectableCircle';
-import { TYPOGRAPHY } from '../styles/typography';
+import { Header } from '../../components/Header';
+import InstructionText from '../../components/camera/instructionText';
+import { SelectableCircle } from '../../components/selectableCircle';
+import { TYPOGRAPHY } from '../../styles/typography';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -64,7 +64,7 @@ export const OnboardSkinDetails: React.FC = () => {
     }
 
     router.push({
-      pathname: '/onboardSkinProductsClick',
+      pathname: '/(screens)/onboarding/skinProductsClick',
       // state: {
       //   skinType: selectedSkinType,
       //   skinConcerns: selectedConcerns,

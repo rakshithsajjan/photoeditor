@@ -2,12 +2,12 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 
-import { Header } from '../components/Header';
-import { InstructionText } from '../components/camera/instructionText';
-import { ImageCard } from '../components/imageCard';
-import { useCapturedImages } from '../hooks/capturedImageContext';
-import { useCamera } from '../hooks/useCamera';
-import { TYPOGRAPHY } from '../styles/typography';
+import { Header } from '../../components/Header';
+import { InstructionText } from '../../components/camera/instructionText';
+import { ImageCard } from '../../components/imageCard';
+import { useCapturedImages } from '../../hooks/capturedImageContext';
+import { useCamera } from '../../hooks/useCamera';
+import { TYPOGRAPHY } from '../../styles/typography';
 
 export const OnboardSkinProductsDisplay: React.FC = () => {
   const { capturedImages, removeCapturedImage } = useCapturedImages();

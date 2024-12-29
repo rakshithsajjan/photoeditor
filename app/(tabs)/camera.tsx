@@ -20,7 +20,7 @@ export default function CameraTab() {
         <CameraTool
           onPhotoCapture={takePicture}
           cameraFacing="front"
-          nextScreenRoute="/home"
+          nextScreenRoute="/(tabs)/home"
           placeholderText="Take a clear picture of your skin to log your progress!"
         />
         {/* <CameraButton onPress={takePicture} disabled={isCapturing} /> */}
