@@ -2,22 +2,46 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 
-import { Header } from '../../components/Header';
-import { InstructionText } from '../../components/camera/instructionText';
-import { ImageCard } from '../../components/imageCard';
-import { useCapturedImages } from '../../hooks/capturedImageContext';
-import { useCamera } from '../../hooks/useCamera';
-import { TYPOGRAPHY } from '../../styles/typography';
+import { Header } from '~/app/components/Header';
+import { InstructionText } from '~/app/components/camera/instructionText';
+import { ImageCard } from '~/app/components/imageCard';
+import { useCapturedImages } from '~/app/hooks/capturedImageContext';
+import { useCamera } from '~/app/hooks/useCamera';
+import { TYPOGRAPHY } from '~/app/styles/typography';
+import type { CapturedImage } from '~/app/types/camera';
+
+const ImageSection: React.FC<{
+  title: string;
+  images: CapturedImage[];
+  onRemoveImage: (uri: string, type: 'selfie' | 'products') => void;
+}> = ({ title, images, onRemoveImage }) => (
+  <View style={styles.sectionContainer}>
+    <Text style={styles.sectionTitle}>{title}</Text>
+    <View style={styles.gridContainer}>
+      {images.length > 0 ? (
+        images.map((image, index) => (
+          <ImageCard
+            key={`${image.uri}-${index}`}
+            imageUri={image.uri}
+            onRemovePress={() => onRemoveImage(image.uri, image.type)}
+          />
+        ))
+      ) : (
+        <Text style={styles.noImagesText}>No images added yet</Text>
+      )}
+    </View>
+  </View>
+);
 
 export const OnboardSkinProductsDisplay: React.FC = () => {
-  const { capturedImages, removeCapturedImage } = useCapturedImages();
+  const { selfieImages, productImages, removeCapturedImage } = useCapturedImages();
 
-  const handleRemoveImage = (imageUri: string) => {
-    removeCapturedImage(imageUri);
+  const handleRemoveImage = (imageUri: string, type: 'selfie' | 'products') => {
+    removeCapturedImage(imageUri, type);
   };
 
   const handleContinue = () => {
-    if (capturedImages.length === 0) {
+    if (selfieImages.length === 0 && productImages.length === 0) {
       // Optionally show an alert or message
       return;
     }
@@ -28,32 +52,32 @@ export const OnboardSkinProductsDisplay: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Header title="ClearlyYou" />
-        <InstructionText message="These are the list of the products you use." />
+        <InstructionText message="" />
 
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}>
-          <View style={styles.gridContainer}>
-            {capturedImages.length > 0 ? (
-              capturedImages.map((image, index) => (
-                <ImageCard
-                  key={`${image.uri}-${index}`}
-                  imageUri={image.uri}
-                  onRemovePress={() => handleRemoveImage}
-                />
-              ))
-            ) : (
-              <Text style={styles.continueButtonText}>No products added yet</Text>
-            )}
-          </View>
+          <ImageSection
+            title="Skin Selfies"
+            images={selfieImages}
+            onRemoveImage={handleRemoveImage}
+          />
+          <ImageSection
+            title="Product Images"
+            images={productImages}
+            onRemoveImage={handleRemoveImage}
+          />
         </ScrollView>
 
         <View style={styles.footer}>
           <TouchableOpacity
-            style={[styles.continueButton, capturedImages.length === 0 && styles.disabledButton]}
+            style={[
+              styles.continueButton,
+              selfieImages.length === 0 && productImages.length === 0 && styles.disabledButton,
+            ]}
             onPress={handleContinue}
-            disabled={capturedImages.length === 0}>
+            disabled={selfieImages.length === 0 && productImages.length === 0}>
             <Text style={styles.continueButtonText}>Let AI create your perfect skin routine</Text>
           </TouchableOpacity>
         </View>
@@ -104,6 +128,22 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.body,
     color: '#fff',
     fontWeight: '600',
+  },
+  // images section
+  sectionContainer: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    ...TYPOGRAPHY.body,
+    marginBottom: 12,
+    paddingHorizontal: 16,
+    color: '#333',
+  },
+  noImagesText: {
+    ...TYPOGRAPHY.body,
+    color: '#666',
+    textAlign: 'center',
+    padding: 16,
   },
 });
 

@@ -1,37 +1,72 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-interface CapturedImage {
-  uri: string;
-  base64: string;
-}
+import type { CapturedImage } from '~/app/types/camera';
 
 interface CapturedImagesContextType {
-  capturedImages: CapturedImage[];
+  selfieImages: CapturedImage[];
+  productImages: CapturedImage[];
   addCapturedImage: (image: CapturedImage) => void;
-  removeCapturedImage: (uri: string) => void;
-  clearCapturedImages: () => void;
+  removeCapturedImage: (uri: string, type: 'selfie' | 'products') => void;
+  clearCapturedImages: (type: 'selfie' | 'products') => void;
 }
 
 const CapturedImagesContext = createContext<CapturedImagesContextType | undefined>(undefined);
 
 export const CapturedImagesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [capturedImages, setCapturedImages] = useState<CapturedImage[]>([]);
+  const [selfieImages, setSelfieImages] = useState<CapturedImage[]>([]);
+  const [productImages, setProductImages] = useState<CapturedImage[]>([]);
 
+  // const addCapturedImage = (image: CapturedImage) => {
+  //   setCapturedImages((prev) => [...prev, image]);
+  //   console.log('new image added');
+  // };
   const addCapturedImage = (image: CapturedImage) => {
-    setCapturedImages((prev) => [...prev, image]);
+    console.log('=== Adding new image in addCapturedImage in hooks/capturedImageContext.tsx ===');
+    console.log('\nNew image:', image.uri.split('-').pop());
+    // console.log('Previous images:', capturedImages);
+    if (image.type === 'selfie') {
+      setSelfieImages((prevImages) => {
+        const newImages = [...prevImages, image];
+        return newImages;
+      });
+    } else {
+      setProductImages((prevImages) => {
+        const newImages = [...prevImages, image];
+        return newImages;
+      });
+    }
   };
 
-  const removeCapturedImage = (uri: string) => {
-    setCapturedImages((prev) => prev.filter((img) => img.uri !== uri));
+  // debug useEffect
+  // useEffect(() => {
+  //   capturedImages.forEach((img, index) => {
+  //     console.log(`image ${index + 1}`, img.uri);
+  //   });
+  // }, [capturedImages]);
+  //////////////////
+
+  const removeCapturedImage = (uri: string, type: 'selfie' | 'products') => {
+    if (type === 'selfie') {
+      setSelfieImages((prev) => prev.filter((img) => img.uri !== uri));
+    } else {
+      setProductImages((prev) => prev.filter((img) => img.uri !== uri));
+    }
   };
 
-  const clearCapturedImages = () => {
-    setCapturedImages([]);
+  const clearCapturedImages = (type: 'selfie' | 'products') => {
+    if (type === 'selfie') setSelfieImages([]);
+    else setProductImages([]);
   };
 
   return (
     <CapturedImagesContext.Provider
-      value={{ capturedImages, addCapturedImage, removeCapturedImage, clearCapturedImages }}>
+      value={{
+        selfieImages,
+        productImages,
+        addCapturedImage,
+        removeCapturedImage,
+        clearCapturedImages,
+      }}>
       {children}
     </CapturedImagesContext.Provider>
   );

@@ -9,7 +9,7 @@ import { CameraTool } from '../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
 export default function CameraTab() {
-  const { takePicture, isCapturing } = useCamera();
+  const { takePicture, isCapturing } = useCamera('selfie');
 
   return (
     <>
@@ -20,6 +20,7 @@ export default function CameraTab() {
         <CameraTool
           onPhotoCapture={takePicture}
           cameraFacing="front"
+          imageType="selfie"
           nextScreenRoute="/(tabs)/home"
           placeholderText="Take a clear picture of your skin to log your progress!"
         />

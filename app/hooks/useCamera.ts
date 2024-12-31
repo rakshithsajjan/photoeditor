@@ -1,19 +1,17 @@
 /* eslint-disable import/order */
 import { useState, useRef } from 'react';
 import { Camera, CameraView } from 'expo-camera';
-import { useCapturedImages } from './capturedImageContext';
+import { useCapturedImages } from '~/app/hooks/capturedImageContext';
+import type { CapturedImage } from '~/app/types/camera';
 
-interface CapturedImage {
-  uri: string;
-  base64: string;
-}
-
-export const useCamera = () => {
+export const useCamera = (imageType: 'selfie' | 'products') => {
   const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [isCapturing, setIsCapturing] = useState(false);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<CapturedImage | null>(null);
   const { addCapturedImage } = useCapturedImages();
   const cameraRef = useRef<CameraView>(null);
+  // new state for temporary storage
+  const [pendingImages, setPendingImages] = useState<CapturedImage[]>([]);
 
   const requestPermission = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
@@ -21,17 +19,9 @@ export const useCamera = () => {
     return status === 'granted';
   };
 
-  const resetCamera = () => {
-    setCapturedImage(null);
-  };
-
-  const handleAddCapturedImage = (photo: { uri: string; base64: string }) => {
-    addCapturedImage(photo);
-    resetCamera();
-  };
-
   const takePicture = async () => {
     if (!cameraRef.current || isCapturing) return;
+    console.log('Taking picture in useCamera.ts/takePicture()...');
 
     try {
       setIsCapturing(true);
@@ -39,8 +29,21 @@ export const useCamera = () => {
         quality: 1,
         base64: true,
       });
+      // console.log('Photo taken in useCamera.ts/takePicture():', photo?.uri);
       if (photo) {
-        setCapturedImage(photo.uri);
+        const newCapturedImage = {
+          // Store both uri and base64 in the state
+          uri: photo.uri,
+          base64: photo.base64 || '',
+          type: imageType,
+        };
+        console.log(
+          '\nCaptured image in useCamera.ts/takePicture():',
+          newCapturedImage.uri.split('-').pop()
+        );
+        setCapturedImage(newCapturedImage);
+        // add to pending images
+        setPendingImages((prevImages) => [...prevImages, newCapturedImage]);
         return photo;
       }
       return null;
@@ -49,6 +52,31 @@ export const useCamera = () => {
     } finally {
       setIsCapturing(false);
     }
+  };
+
+  const resetCamera = () => {
+    console.log('current capturedImage before reset:', capturedImage?.uri.split('-').pop());
+    setCapturedImage(null);
+  };
+
+  const handleAddCapturedImage = (photo: CapturedImage) => {
+    console.log(
+      '\nphoto to add in handleAddCapturedImage() in hooks/useCamera.ts:',
+      photo.uri.split('-').pop()
+    );
+    addCapturedImage({
+      uri: photo.uri,
+      base64: photo.base64,
+      type: photo.type,
+    });
+  };
+
+  // handle multiple images (pending)
+  const handleAddAllPendingImages = () => {
+    pendingImages.forEach((image) => {
+      handleAddCapturedImage(image);
+    });
+    setPendingImages([]); // clear pending images after adding
   };
 
   return {
@@ -60,6 +88,8 @@ export const useCamera = () => {
     requestPermission,
     resetCamera,
     handleAddCapturedImage,
+    pendingImages,
+    handleAddAllPendingImages,
   };
 };
 

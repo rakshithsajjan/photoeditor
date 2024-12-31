@@ -9,7 +9,7 @@ import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
 export const OnboardSelfie: React.FC = () => {
-  const { takePicture, isCapturing } = useCamera();
+  const { takePicture, isCapturing } = useCamera('selfie');
 
   return (
     <>
@@ -18,8 +18,9 @@ export const OnboardSelfie: React.FC = () => {
         <Header title="ClearlyYou" />
         <InstructionText message="Click a selfie and show off your a brilliant smile :)" />
         <CameraTool
-          onPhotoCapture={takePicture}
+          onPhotoCapture={() => takePicture()}
           cameraFacing="front"
+          imageType="selfie"
           nextScreenRoute="/(screens)/onboarding/skinDetails"
           // placeholderText="Click the button to take a selfie :)"
         />

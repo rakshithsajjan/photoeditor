@@ -6,11 +6,14 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 
 import { CameraButton } from './cameraButton';
 import { ImageActionButtons } from './imageActionButtons';
-import { useCamera } from '../../hooks/useCamera';
+import { useCamera } from '~/app/hooks/useCamera';
+
+import { useCapturedImages } from '~/app/hooks/capturedImageContext';
 
 interface CameraViewProps {
-  onPhotoCapture: (photo: string) => void;
+  onPhotoCapture: () => void;
   cameraFacing?: 'front' | 'back';
+  imageType: 'selfie' | 'products';
   nextScreenRoute?: string;
   placeholderText?: string;
 }
@@ -18,9 +21,19 @@ interface CameraViewProps {
 export const CameraTool: React.FC<CameraViewProps> = ({
   onPhotoCapture,
   cameraFacing,
+  imageType,
   nextScreenRoute,
   placeholderText,
 }) => {
+  //////////
+  // const { capturedImages } = useCapturedImages();
+
+  // useEffect(() => {
+  //   for (const capturedImage of capturedImages) {
+  //     console.log('capturedImage in cameraTool.tsx:', capturedImage.uri);
+  //   }
+  // }, [capturedImages]);
+  //////////
   const {
     hasPermission,
     cameraRef,
@@ -30,7 +43,9 @@ export const CameraTool: React.FC<CameraViewProps> = ({
     capturedImage,
     resetCamera,
     handleAddCapturedImage,
-  } = useCamera();
+    pendingImages,
+    handleAddAllPendingImages,
+  } = useCamera(imageType);
 
   useEffect(() => {
     const initializeCamera = async () => {
@@ -46,7 +61,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   const handleCapture = async () => {
     const photo = await takePicture();
     if (photo?.base64) {
-      onPhotoCapture(photo.base64);
+      onPhotoCapture();
     }
   };
 
@@ -55,27 +70,40 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   };
 
   const handleAdd = () => {
+    console.log('\ncurrent capturedImage in cameraTool.tsx/handleAdd:', capturedImage?.uri.split('-').pop());
     if (capturedImage) {
       // store the current taken image
-      handleAddCapturedImage({ uri: capturedImage, base64: capturedImage });
-      resetCamera();
+      handleAddCapturedImage({
+        uri: capturedImage.uri,
+        base64: capturedImage.base64,
+        type: capturedImage.type,
+      });
+      resetCamera(); // Reset so the UI allows user to take another pic
     }
   };
 
   const handleContinue = () => {
-    if (capturedImage) {
-      // store the current taken image
-      handleAddCapturedImage({ uri: capturedImage, base64: capturedImage });
-    }
+    console.log('\ncurrent capturedImage in cameraTool.tsx/handleContinue:', capturedImage?.uri.split('-').pop());
+    handleAddAllPendingImages();
     router.push(nextScreenRoute as any);
   };
+
+  ////////// debug
+  // useEffect(() => {
+  //   console.log('Total images:', capturedImages.length);
+  //   capturedImages.forEach((img, index) => {
+  //     console.log(`Image ${index + 1}:`, img.uri);
+  //   });
+  // }, [capturedImages]);
+
+  /////////////
 
   // const capturedImagesCount = capturedImages.length + (capturedImage ? 1 : 0);
   return (
     <View style={styles.container}>
       {capturedImage ? (
         <>
-          <Image source={{ uri: capturedImage }} style={styles.camera} resizeMode="cover" />
+          <Image source={{ uri: capturedImage.uri }} style={styles.camera} resizeMode="cover" />
           <ImageActionButtons
             onRetake={handleRetake}
             onAdd={handleAdd}

@@ -9,7 +9,7 @@ import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
 export const OnboardSkinProductsClick: React.FC = () => {
-  const { takePicture, isCapturing } = useCamera();
+  const { takePicture, isCapturing } = useCamera('products');
 
   return (
     <>
@@ -18,8 +18,9 @@ export const OnboardSkinProductsClick: React.FC = () => {
         <Header title="ClearlyYou" />
         <InstructionText message="take a picture of your skin product's composition:" />
         <CameraTool
-          onPhotoCapture={takePicture}
+          onPhotoCapture={() => takePicture()}
           cameraFacing="back"
+          imageType="products"
           nextScreenRoute="/(screens)/onboarding/skinProductsDisplay"
           placeholderText="Click to show us your skin products composition"
         />
