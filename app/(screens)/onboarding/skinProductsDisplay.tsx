@@ -6,7 +6,6 @@ import { Header } from '~/app/components/Header';
 import { InstructionText } from '~/app/components/camera/instructionText';
 import { ImageCard } from '~/app/components/imageCard';
 import { useCapturedImages } from '~/app/hooks/capturedImageContext';
-import { useCamera } from '~/app/hooks/useCamera';
 import { TYPOGRAPHY } from '~/app/styles/typography';
 import type { CapturedImage } from '~/app/types/camera';
 

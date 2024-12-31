@@ -6,9 +6,9 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 
 import { CameraButton } from './cameraButton';
 import { ImageActionButtons } from './imageActionButtons';
-import { useCamera } from '~/app/hooks/useCamera';
 
-import { useCapturedImages } from '~/app/hooks/capturedImageContext';
+// import { useCapturedImages } from '~/app/hooks/capturedImageContext';
+import { useCamera } from '~/app/hooks/useCamera';
 
 interface CameraViewProps {
   onPhotoCapture: () => void;
@@ -43,7 +43,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({
     capturedImage,
     resetCamera,
     handleAddCapturedImage,
-    pendingImages,
+    // pendingImages,
     handleAddAllPendingImages,
   } = useCamera(imageType);
 
@@ -70,7 +70,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   };
 
   const handleAdd = () => {
-    console.log('\ncurrent capturedImage in cameraTool.tsx/handleAdd:', capturedImage?.uri.split('-').pop());
+    // console.log('\ncurrent capturedImage in cameraTool.tsx/handleAdd:', capturedImage?.uri.split('-').pop());
     if (capturedImage) {
       // store the current taken image
       handleAddCapturedImage({
@@ -83,7 +83,7 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   };
 
   const handleContinue = () => {
-    console.log('\ncurrent capturedImage in cameraTool.tsx/handleContinue:', capturedImage?.uri.split('-').pop());
+    // console.log('\ncurrent capturedImage in cameraTool.tsx/handleContinue:', capturedImage?.uri.split('-').pop());
     handleAddAllPendingImages();
     router.push(nextScreenRoute as any);
   };
