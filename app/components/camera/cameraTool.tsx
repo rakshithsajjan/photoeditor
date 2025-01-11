@@ -8,7 +8,7 @@ import { CameraButton } from './cameraButton';
 import { ImageActionButtons } from './imageActionButtons';
 
 // import { useCapturedImages } from '~/app/hooks/capturedImageContext';
-import { selfieAnalysis, productsAnalysis } from '~/app/backend/openai/api';
+import { getSelfieAnalysis, getProductsAnalysis } from '~/app/backend/openai/api';
 import { useCamera } from '~/app/hooks/useCamera';
 import { useCapturedImages } from '~/app/utils/capturedImageContext';
 
@@ -91,9 +91,9 @@ export const CameraTool: React.FC<CameraViewProps> = ({
     const imageType = capturedImage?.type;
     handleAddAllPendingImages();
     if (imageType === 'selfie') {
-      selfieAnalysis(selfieImages);
+      getSelfieAnalysis(selfieImages);
     } else if (imageType === 'products') {
-      productsAnalysis(productImages);
+      getProductsAnalysis(productImages);
     }
     router.push(nextScreenRoute as any);
   };

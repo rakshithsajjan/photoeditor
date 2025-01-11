@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 
+import { getSelfieAnalysis, getProductsAnalysis, getSkinRoutine } from '~/app/backend/openai/api';
 import { Header } from '~/app/components/Header';
 import { InstructionText } from '~/app/components/camera/instructionText';
 import { ImageCard } from '~/app/components/imageCard';
@@ -39,10 +40,30 @@ export const OnboardSkinProductsDisplay: React.FC = () => {
     removeCapturedImage(imageUri, type);
   };
 
-  const letAiMakeSkinRoutine = () => {
+  const letAiMakeSkinRoutine = async () => {
     if (selfieImages.length === 0 && productImages.length === 0) {
       // Optionally show an alert or message
       return;
+    }
+    // let AI make skin routine
+    try {
+      // Wait for both analyses to complete
+      const [selfieAnalysis, productsAnalysis] = await Promise.all([
+        getSelfieAnalysis(selfieImages),
+        getProductsAnalysis(productImages),
+      ]);
+
+      // Get the skin routine using the analysis results
+      const skinRoutine = await getSkinRoutine(selfieAnalysis, productsAnalysis);
+
+      // Now you can use the skinRoutine data
+      console.log('Generated Skin Routine:', skinRoutine);
+
+      // push to home after AI routine is created
+      router.push('/home');
+    } catch (error) {
+      console.error('Error generating skin routine:', error);
+      // Handle error appropriately
     }
 
     // push to home after AI routine is created
