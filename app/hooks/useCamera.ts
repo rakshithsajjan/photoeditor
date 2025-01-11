@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import { useState, useRef } from 'react';
 import { Camera, CameraView } from 'expo-camera';
-import { useCapturedImages } from '~/app/hooks/capturedImageContext';
+import { useCapturedImages } from '~/app/utils/capturedImageContext';
 import type { CapturedImage } from '~/app/types/camera';
 
 export const useCamera = (imageType: 'selfie' | 'products') => {

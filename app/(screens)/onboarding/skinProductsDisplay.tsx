@@ -5,9 +5,9 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } fr
 import { Header } from '~/app/components/Header';
 import { InstructionText } from '~/app/components/camera/instructionText';
 import { ImageCard } from '~/app/components/imageCard';
-import { useCapturedImages } from '~/app/hooks/capturedImageContext';
 import { TYPOGRAPHY } from '~/app/styles/typography';
 import type { CapturedImage } from '~/app/types/camera';
+import { useCapturedImages } from '~/app/utils/capturedImageContext';
 
 const ImageSection: React.FC<{
   title: string;
@@ -39,11 +39,13 @@ export const OnboardSkinProductsDisplay: React.FC = () => {
     removeCapturedImage(imageUri, type);
   };
 
-  const handleContinue = () => {
+  const letAiMakeSkinRoutine = () => {
     if (selfieImages.length === 0 && productImages.length === 0) {
       // Optionally show an alert or message
       return;
     }
+
+    // push to home after AI routine is created
     router.push('/home');
   };
 
@@ -75,7 +77,7 @@ export const OnboardSkinProductsDisplay: React.FC = () => {
               styles.continueButton,
               selfieImages.length === 0 && productImages.length === 0 && styles.disabledButton,
             ]}
-            onPress={handleContinue}
+            onPress={letAiMakeSkinRoutine}
             disabled={selfieImages.length === 0 && productImages.length === 0}>
             <Text style={styles.continueButtonText}>Let AI create your perfect skin routine</Text>
           </TouchableOpacity>

@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { CapturedImagesProvider } from './hooks/capturedImageContext';
+import { CapturedImagesProvider } from './utils/capturedImageContext';
 
 export default function Layout() {
   return (
