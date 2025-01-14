@@ -26,6 +26,7 @@ async function apiCall(content: any, analysisTypeResponse: any) {
   });
   const responseContent = response.choices[0].message.content;
   if (!responseContent) throw new Error('No content in response');
+  console.log(responseContent);
   return JSON.parse(responseContent);
 }
 
@@ -72,7 +73,7 @@ export const getProductsAnalysis = async (productImages: CapturedImage[]) => {
       },
     })),
   ];
-  console.log('running api call');
+  // console.log('running api call');
   try {
     return await apiCall(content, productsAnalysisResponse);
   } catch (error) {
@@ -82,82 +83,89 @@ export const getProductsAnalysis = async (productImages: CapturedImage[]) => {
 };
 
 const skinRoutinePrompt = (selfieAnalysis: any, productsAnalysis: any) => {
-  return `As an expert dermatologist and skincare specialist, analyze the following information and create a personalized skincare routine:
+  return `I want a comprehensive, personalized skincare routine based on facial analysis and current skin products usage data.
+    Each recommendation should be evidence-based, incorporating both modern skincare science and traditional Ayurvedic practices, with a focus on addressing identified skin concerns and optimizing skin health.
+    For the routine, return:
 
-SKIN ANALYSIS:
-${JSON.stringify(selfieAnalysis, null, 2)}
+    Morning Routine with:
+    Step-by-step product application order
+    Specific product recommendations
+    Application techniques
+    Timing between steps
 
-CURRENTLY USED SKIN PRODUCT INGREDIENTS:
-${JSON.stringify(productsAnalysis, null, 2)}
 
-TASK:
-Create a comprehensive skincare routine addressing the following aspects:
-1. Morning Routine:
-   - Cleansing recommendations
-   - Treatment ayurvedic remedies & products (considering skin concerns: ${selfieAnalysis.concerns})
-   - Sun protection
-   - Product application order
-   - Specific usage instructions
+    Evening Routine with:
+    Step-by-step product application order
+    Specific product recommendations
+    Application techniques
+    Timing between steps
 
-2. Evening Routine:
-   - Makeup removal (if applicable)
-   - Cleansing
-   - Treatment ayurvedic remedies & products
-   - Moisturization
-   - Product application order
 
-3. Weekly Special Care:
-   - Exfoliation recommendations
-   - Masks or treatments
-   - Special considerations
+    Weekly Special Care with:
+    Exfoliation schedule
+    Mask recommendations
+    Special treatments
 
-Consider:
-- Product ingredients compatibility
-- Skin sensitivity and potential reactions
-- Gradual introduction of new products
-- Alternative product suggestions if needed
-- Specific instructions for application techniques
-- Frequency of use for each product
-- Waiting time between products
-- Potential seasonal adjustments
 
-Provide the routine in a structured format with:
-- Clear step-by-step instructions
-- Product usage frequency
-- Application methods
-- Cautions and notes
-- Expected timeline for results
-- Signs of adverse reactions to watch for
+    Additional Guidelines including:
+    Product introduction timeline
+    Progress tracking methods
+    Expected results timeline
+    Warning signs to watch for
 
-Additional Recommendations:
-- Lifestyle factors affecting skin health
-- Dietary considerations
-- Environmental protection measures
-- Progress tracking suggestions`;
+    Be careful to:
+
+    Verify ingredient compatibility before making recommendations
+    Ensure products don't conflict or cancel each other out
+    Consider skin sensitivity and potential allergic reactions
+    Account for seasonal changes and environmental factors
+    Provide alternatives for any unavailable products
+
+    --
+    For context: The analysis comes from facial scanning data and current product ingredient analysis:
+    Selfie Analysis: ${JSON.stringify(selfieAnalysis, null, 2)}
+    Product Analysis: ${JSON.stringify(productsAnalysis, null, 2)}
+    Skin concerns: ${selfieAnalysis.concerns}
+    The routine should account for:
+
+    Lifestyle factors affecting skin health
+    Dietary considerations
+    Environmental protection measures
+    Current skincare habits and preferences
+    Need for both immediate and long-term results
+    Preference for incorporating natural and Ayurvedic remedies
+    Focus on sustainable, long-term skin health practices`;
 };
 
 export async function getSkinRoutine(selfieAnalysis: any, productsAnalysis: any) {
+  const content = [
+    {
+      type: 'text',
+      text: skinRoutinePrompt(selfieAnalysis, productsAnalysis),
+    },
+  ];
   try {
-    const response = await openai.chat.completions.create({
-      model: 'o1-preview', // response_format not supported with this model
-      messages: [
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: skinRoutinePrompt(selfieAnalysis, productsAnalysis),
-            },
-          ],
-        },
-      ],
-      response_format: zodResponseFormat(skinRoutineResponse, 'skinroutine_response_format'),
-    });
-    const skinRoutine = response.choices[0].message.content;
-    if (!skinRoutine) throw new Error('No content in response');
-    console.log(JSON.parse(skinRoutine));
-    // return it
-    return JSON.parse(skinRoutine);
+    // const response = await openai.chat.completions.create({
+    //   model: 'gpt-4o-mini', // response_format not supported with this model
+    //   messages: [
+    //     {
+    //       role: 'user',
+    //       content: [
+    //         {
+    //           type: 'text',
+    //           text: skinRoutinePrompt(selfieAnalysis, productsAnalysis),
+    //         },
+    //       ],
+    //     },
+    //   ],
+    //   response_format: zodResponseFormat(skinRoutineResponse, 'response_format'),
+    // });
+    // const skinRoutine = response.choices[0].message.content;
+    // if (!skinRoutine) throw new Error('No content in response');
+    // console.log(JSON.parse(skinRoutine));
+    // // return it
+    // return JSON.parse(skinRoutine);
+    return await apiCall(content, skinRoutineResponse);
   } catch (error) {
     console.log('API call failed for skin routine:', error);
     throw error;

@@ -8,7 +8,7 @@ import { InstructionText } from '../../components/camera/instructionText';
 import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
-export const OnboardSkinProductsClick: React.FC = () => {
+export const SkinProductsClick: React.FC = () => {
   const { takePicture, isCapturing } = useCamera('products');
 
   return (
@@ -21,7 +21,7 @@ export const OnboardSkinProductsClick: React.FC = () => {
           onPhotoCapture={() => takePicture()}
           cameraFacing="back"
           imageType="products"
-          nextScreenRoute="/(screens)/onboarding/skinProductsDisplay"
+          nextScreenRoute="/(screens)/onboarding/summary"
           placeholderText="Click to show us your skin products composition"
         />
         {/* <CameraButton onPress={takePicture} disabled={isCapturing} /> */}
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardSkinProductsClick;
+export default SkinProductsClick;

@@ -1,14 +1,14 @@
 import { Link, Stack } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 
-import { OnboardSelfie } from './(screens)/onboarding/selfie';
+import { Selfie } from './(screens)/onboarding/selfie';
 
 export default function Home() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <OnboardSelfie />
+        <Selfie />
       </View>
     </>
   );

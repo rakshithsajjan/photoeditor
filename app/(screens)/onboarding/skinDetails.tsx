@@ -39,7 +39,7 @@ const skinConcerns = [
   { label: 'Wrinkles' }, // image: require('../assets/skin-concerns/wrinkles.png') },
 ];
 
-export const OnboardSkinDetails: React.FC = () => {
+export const SkinDetails: React.FC = () => {
   // const navigation = useNavigation();
   const [selectedSkinType, setSelectedSkinType] = useState<string>('');
   const [selectedConcerns, setSelectedConcerns] = useState<string[]>([]);
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardSkinDetails;
+export default SkinDetails;

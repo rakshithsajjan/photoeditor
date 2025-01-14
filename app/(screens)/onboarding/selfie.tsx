@@ -8,7 +8,7 @@ import { InstructionText } from '../../components/camera/instructionText';
 import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
-export const OnboardSelfie: React.FC = () => {
+export const Selfie: React.FC = () => {
   const { takePicture, isCapturing } = useCamera('selfie');
 
   return (
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnboardSelfie;
+export default Selfie;
