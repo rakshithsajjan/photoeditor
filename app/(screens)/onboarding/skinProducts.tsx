@@ -8,7 +8,7 @@ import { InstructionText } from '../../components/camera/instructionText';
 import { CameraTool } from '../../components/camera/cameraTool';
 // import { CameraButton } from '../../components/camera/cameraButton';
 
-export const SkinProductsClick: React.FC = () => {
+export const SkinProducts: React.FC = () => {
   const { takePicture, isCapturing } = useCamera('products');
 
   return (
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SkinProductsClick;
+export default SkinProducts;

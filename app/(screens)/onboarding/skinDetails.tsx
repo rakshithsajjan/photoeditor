@@ -64,7 +64,7 @@ export const SkinDetails: React.FC = () => {
     }
 
     router.push({
-      pathname: '/(screens)/onboarding/skinProductsClick',
+      pathname: '/(screens)/onboarding/skinProducts',
       // state: {
       //   skinType: selectedSkinType,
       //   skinConcerns: selectedConcerns,
