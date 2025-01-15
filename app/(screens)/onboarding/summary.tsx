@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import React from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import { set } from 'zod';
 
 import { getSelfieAnalysis, getProductsAnalysis, getSkinRoutine } from '~/app/backend/openai/api';
 import { Header } from '~/app/components/Header';
@@ -8,7 +9,8 @@ import { InstructionText } from '~/app/components/camera/instructionText';
 import { ImageCard } from '~/app/components/imageCard';
 import { TYPOGRAPHY } from '~/app/styles/typography';
 import type { CapturedImage } from '~/app/types/camera';
-import { useCapturedImages } from '~/app/utils/capturedImageContext';
+import { useCapturedImages } from '~/app/utils/capturedImage';
+import { useSkinRoutine } from '~/app/utils/skinRoutine';
 
 const ImageSection: React.FC<{
   title: string;
@@ -35,6 +37,7 @@ const ImageSection: React.FC<{
 
 export const Summary: React.FC = () => {
   const { selfieImages, productImages, removeCapturedImage } = useCapturedImages();
+  const { setSkinRoutine } = useSkinRoutine();
 
   const handleRemoveImage = (imageUri: string, type: 'selfie' | 'products') => {
     removeCapturedImage(imageUri, type);
@@ -54,10 +57,8 @@ export const Summary: React.FC = () => {
       ]);
 
       // Get the skin routine using the analysis results
-      const skinRoutine = await getSkinRoutine(selfieAnalysis, productsAnalysis);
-
-      // Now you can use the skinRoutine data
-      console.log('Generated Skin Routine:', skinRoutine);
+      const skinRoutine = JSON.parse(await getSkinRoutine(selfieAnalysis, productsAnalysis));
+      setSkinRoutine(skinRoutine);
 
       // push to home after AI routine is created
       router.push('/home');

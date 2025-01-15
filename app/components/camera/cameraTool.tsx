@@ -7,10 +7,9 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import { CameraButton } from './cameraButton';
 import { ImageActionButtons } from './imageActionButtons';
 
-// import { useCapturedImages } from '~/app/hooks/capturedImageContext';
 import { getSelfieAnalysis, getProductsAnalysis } from '~/app/backend/openai/api';
 import { useCamera } from '~/app/hooks/useCamera';
-import { useCapturedImages } from '~/app/utils/capturedImageContext';
+import { useCapturedImages } from '~/app/utils/capturedImage';
 
 interface CameraViewProps {
   onPhotoCapture: () => void;

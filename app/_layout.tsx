@@ -1,11 +1,14 @@
 import { Stack } from 'expo-router';
 
-import { CapturedImagesProvider } from './utils/capturedImageContext';
+import { CapturedImagesProvider } from './utils/capturedImage';
+import { SkinRoutineProvider } from './utils/skinRoutine';
 
 export default function Layout() {
   return (
     <CapturedImagesProvider>
-      <Stack screenOptions={{ headerShown: false }} />
+      <SkinRoutineProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </SkinRoutineProvider>
     </CapturedImagesProvider>
   );
 }

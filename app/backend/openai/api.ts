@@ -26,8 +26,10 @@ async function apiCall(content: any, analysisTypeResponse: any) {
   });
   const responseContent = response.choices[0].message.content;
   if (!responseContent) throw new Error('No content in response');
+  console.log(typeof responseContent);
   console.log(responseContent);
-  return JSON.parse(responseContent);
+  // return JSON.parse(responseContent);
+  return responseContent;
 }
 
 /** STEPS FOR AI SKINCARE ROUTINE
@@ -171,3 +173,9 @@ export async function getSkinRoutine(selfieAnalysis: any, productsAnalysis: any)
     throw error;
   }
 }
+
+export default {
+  getSelfieAnalysis,
+  getProductsAnalysis,
+  getSkinRoutine,
+};

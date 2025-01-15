@@ -110,14 +110,14 @@ export const productsAnalysisResponse = z.object({
 export const skinRoutineResponse = z.object({
   morningRoutine: z.array(
     z.object({
-      stepName: z.string(),
+      stepname: z.string(),
       description: z.string(),
       ingredients: z.array(z.string()),
     })
   ),
-  eveningRoutine: z.array(
+  nightRoutine: z.array(
     z.object({
-      stepName: z.string(),
+      stepname: z.string(),
       description: z.string(),
       ingredients: z.array(z.string()),
     })
@@ -125,3 +125,9 @@ export const skinRoutineResponse = z.object({
   guidelines: z.array(z.string()),
   warnings: z.array(z.string()),
 });
+
+export default {
+  selfieAnalysisResponse,
+  productsAnalysisResponse,
+  skinRoutineResponse,
+};

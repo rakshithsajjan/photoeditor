@@ -27,28 +27,18 @@ export const LogsCard: React.FC<{
 
 // Routine Card Component
 export const RoutineCard: React.FC<{
-  morningSteps: string[];
-  nightSteps: string[];
+  steps?: string[];
+  isMorning: boolean;
   onPress?: () => void;
-}> = ({ morningSteps, nightSteps, onPress }) => (
+}> = ({ steps, isMorning, onPress }) => (
   <BaseCard>
     <TouchableOpacity onPress={onPress}>
       <Text style={[TYPOGRAPHY.heading2, styles.cardTitle]}>Routine</Text>
 
       <View style={styles.routineSection}>
-        <Text style={styles.routineTitle}>Morning routine:</Text>
-        {morningSteps.map((step, index) => (
+        <Text style={styles.routineTitle}>{isMorning ? 'Morning routine' : 'Night routine'}</Text>
+        {steps?.map((step, index) => (
           <View key={`morning-${index}`} style={styles.routineStep}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.routineText}>{step}</Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={[styles.routineSection, styles.nightSection]}>
-        <Text style={styles.routineTitle}>Night routine:</Text>
-        {nightSteps.map((step, index) => (
-          <View key={`night-${index}`} style={styles.routineStep}>
             <Text style={styles.bulletPoint}>•</Text>
             <Text style={styles.routineText}>{step}</Text>
           </View>
@@ -170,3 +160,9 @@ const styles = StyleSheet.create({
     top: 16,
   },
 });
+
+export default {
+  LogsCard,
+  RoutineCard,
+  ProductsCard,
+};

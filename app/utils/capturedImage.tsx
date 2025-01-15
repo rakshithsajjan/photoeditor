@@ -21,7 +21,7 @@ export const CapturedImagesProvider: React.FC<{ children: React.ReactNode }> = (
   //   console.log('new image added');
   // };
   const addCapturedImage = (image: CapturedImage) => {
-    console.log('=== Adding new image in addCapturedImage in hooks/capturedImageContext.tsx ===');
+    console.log('=== Adding new image in addCapturedImage in utils/context/capturedImage.tsx ===');
     console.log('\nNew image:', image.uri.split('-').pop());
     // console.log('Previous images:', capturedImages);
     if (image.type === 'selfie') {
@@ -79,3 +79,5 @@ export const useCapturedImages = () => {
   }
   return context;
 };
+
+export default CapturedImagesContext;
