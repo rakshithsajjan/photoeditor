@@ -1,9 +1,17 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
-import { set } from 'zod';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  SafeAreaView,
+  Alert,
+} from 'react-native';
 
 import { getSelfieAnalysis, getProductsAnalysis, getSkinRoutine } from '~/app/backend/openai/api';
+import { StorageHelper } from '~/app/backend/storage';
 import { Header } from '~/app/components/Header';
 import { InstructionText } from '~/app/components/camera/instructionText';
 import { ImageCard } from '~/app/components/imageCard';
@@ -58,17 +66,22 @@ export const Summary: React.FC = () => {
 
       // Get the skin routine using the analysis results
       const skinRoutine = JSON.parse(await getSkinRoutine(selfieAnalysis, productsAnalysis));
-      setSkinRoutine(skinRoutine);
 
-      // push to home after AI routine is created
-      router.push('/home');
+      // save user data
+      await StorageHelper.updateUserData({
+        isOnboarded: true,
+        streakCount: 0,
+      });
+      await setSkinRoutine(skinRoutine);
+
+      // replace the router to home after AI routine is created
+      router.replace('/(tabs)/home');
     } catch (error) {
       console.error('Error generating skin routine:', error);
-      // Handle error appropriately
+      Alert.alert('Error', 'Failed to generate skin routine. Please try again later.', [
+        { text: 'OK' },
+      ]);
     }
-
-    // push to home after AI routine is created
-    router.push('/home');
   };
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
 
 import { Header } from '~/app/components/Header';
@@ -9,10 +9,21 @@ import { LogsCard, RoutineCard, ProductsCard } from '~/app/components/home/homeC
 import { WeekCalendar } from '~/app/components/home/weekCalendar';
 import { TYPOGRAPHY } from '~/app/styles/typography';
 import { useSkinRoutine } from '~/app/utils/skinRoutine';
+// debug
+import { StorageHelper } from '~/app/backend/storage';
 
 export default function HomeTab() {
   const { skinRoutine } = useSkinRoutine();
 
+  // DEBUG
+  const debugStorage = async () => {
+    const userData = await StorageHelper.getUserData();
+    console.log('Current storage data:', userData);
+  };
+
+  useEffect(() => {
+    debugStorage();
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>

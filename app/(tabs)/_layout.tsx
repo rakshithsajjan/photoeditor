@@ -1,8 +1,49 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
+import { StorageHelper } from '~/app/backend/storage';
+
 export default function TabLayout() {
+  // const router = useRouter();
+
+  // // Protect tabs from unauthorized access
+  // useEffect(() => {
+  //   const checkOnboarding = async () => {
+  //     const userData = await StorageHelper.getUserData();
+  //     if (!userData.isOnboarded) {
+  //       router.replace('/(screens)/onboarding/selfie');
+  //     }
+  //   };
+  //   checkOnboarding();
+  // }, []);
+
+  const [isChecking, setIsChecking] = useState(true);
+  const [isOnboarded, setIsOnboarded] = useState(false);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        const userData = await StorageHelper.getUserData();
+        setIsOnboarded(userData.isOnboarded);
+      } catch (error) {
+        console.error('Error checking access:', error);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    checkAccess();
+  }, []);
+
+  if (isChecking) {
+    return null; // Or loading indicator
+  }
+
+  if (!isOnboarded) {
+    return <Redirect href="/(screens)/onboarding/selfie" />;
+  }
   return (
     <Tabs
       screenOptions={{

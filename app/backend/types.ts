@@ -65,48 +65,6 @@ export const productsAnalysisResponse = z.object({
   productType: z.enum(['cleanser', 'moisturizer', 'serum', 'toner', 'mask', 'scrub', 'sunscreen']),
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// Skin Routine
-// const routineStepSchema = z.object({
-//   name: z.string(),
-//   description: z.string(),
-//   ingredients: z.array(z.string()),
-//   duration: z.string(), // e.g., "1-2 minutes"
-//   frequency: z.string(), // e.g., "daily", "twice daily"
-//   instructions: z.string(),
-//   warnings: z.array(z.string()).optional(),
-//   waitTime: z.string().optional(), // Time to wait before next step
-// });
-
-// export const skinRoutineResponse = z.object({
-//   morningRoutine: z.object({
-//     steps: z.array(routineStepSchema),
-//     totalDuration: z.string(),
-//     specialNotes: z.array(z.string()),
-//   }),
-
-//   eveningRoutine: z.object({
-//     steps: z.array(routineStepSchema),
-//     totalDuration: z.string(),
-//     specialNotes: z.array(z.string()),
-//   }),
-
-//   lifestyle: z.object({
-//     dietary: z.array(z.string()),
-//     habits: z.array(z.string()),
-//     environmental: z.array(z.string()),
-//   }),
-
-//   warnings: z.array(
-//     z.object({
-//       type: z.enum(['ingredients conflict', 'general']),
-//       description: z.string(),
-//       recommendation: z.string(),
-//     })
-//   ),
-// });
-
-// Simplified schema version
 export const skinRoutineResponse = z.object({
   morningRoutine: z.array(
     z.object({
@@ -125,6 +83,13 @@ export const skinRoutineResponse = z.object({
   guidelines: z.array(z.string()),
   warnings: z.array(z.string()),
 });
+
+// local storage
+export interface userStorage {
+  isOnboarded: boolean;
+  streakCount: number;
+  skinRoutine: z.infer<typeof skinRoutineResponse> | null;
+}
 
 export default {
   selfieAnalysisResponse,
