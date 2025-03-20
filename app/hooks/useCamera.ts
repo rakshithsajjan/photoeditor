@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import { useState, useRef } from 'react';
-import { Camera, CameraView } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import { useCapturedImages } from '~/app/utils/capturedImage';
 import type { CapturedImage } from '~/app/types/camera';
 
@@ -9,53 +9,52 @@ export const useCamera = (imageType: 'selfie' | 'products') => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<CapturedImage | null>(null);
   const { addCapturedImage } = useCapturedImages();
-  const cameraRef = useRef<CameraView>(null);
+  const cameraRef = useRef<Camera>(null);
   // new state for temporary storage
   const [pendingImages, setPendingImages] = useState<CapturedImage[]>([]);
 
   const requestPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-    return status === 'granted';
+    try {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      const isGranted = status === 'granted';
+      setHasPermission(isGranted);
+      return isGranted;
+    } catch (error) {
+      console.error('Error requesting camera permission:', error);
+      setHasPermission(false);
+      return false;
+    }
   };
 
   const takePicture = async () => {
-    if (!cameraRef.current || isCapturing) return;
-    console.log('Taking picture in useCamera.ts/takePicture()...');
+    if (!cameraRef.current || isCapturing) return null;
 
     try {
       setIsCapturing(true);
       const photo = await cameraRef.current.takePictureAsync({
-        quality: 1,
+        quality: 0.8,
         base64: true,
       });
-      // console.log('Photo taken in useCamera.ts/takePicture():', photo?.uri);
-      if (photo) {
+
+      if (photo && photo.base64) {
         const newCapturedImage = {
-          // Store both uri and base64 in the state
           uri: photo.uri,
-          base64: photo.base64 || '',
+          base64: photo.base64,
           type: imageType,
         };
-        console.log(
-          '\nCaptured image in useCamera.ts/takePicture():',
-          newCapturedImage.uri.split('-').pop()
-        );
         setCapturedImage(newCapturedImage);
-        // add to pending images
-        setPendingImages((prevImages) => [...prevImages, newCapturedImage]);
         return photo;
       }
       return null;
     } catch (error) {
       console.error('Error taking picture:', error);
+      return null;
     } finally {
       setIsCapturing(false);
     }
   };
 
   const resetCamera = () => {
-    console.log('current capturedImage before reset:', capturedImage?.uri.split('-').pop());
     setCapturedImage(null);
   };
 

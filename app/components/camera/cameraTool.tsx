@@ -1,15 +1,12 @@
 /* eslint-disable react/jsx-no-undef */
-import { CameraView } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
 import { CameraButton } from './cameraButton';
 import { ImageActionButtons } from './imageActionButtons';
-
-import { getSelfieAnalysis, getProductsAnalysis } from '~/app/backend/openai/api';
 import { useCamera } from '~/app/hooks/useCamera';
-import { useCapturedImages } from '~/app/utils/capturedImage';
 
 interface CameraViewProps {
   onPhotoCapture: () => void;
@@ -26,15 +23,6 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   nextScreenRoute,
   placeholderText,
 }) => {
-  //////////
-  // const { capturedImages } = useCapturedImages();
-
-  // useEffect(() => {
-  //   for (const capturedImage of capturedImages) {
-  //     console.log('capturedImage in cameraTool.tsx:', capturedImage.uri);
-  //   }
-  // }, [capturedImages]);
-  //////////
   const {
     hasPermission,
     cameraRef,
@@ -43,18 +31,11 @@ export const CameraTool: React.FC<CameraViewProps> = ({
     isCapturing,
     capturedImage,
     resetCamera,
-    handleAddCapturedImage,
-    // pendingImages,
-    handleAddAllPendingImages,
   } = useCamera(imageType);
-
-  const { selfieImages, productImages } = useCapturedImages();
 
   useEffect(() => {
     const initializeCamera = async () => {
       if (!hasPermission) {
-        // const granted = await requestPermission();
-        // if (!granted) return;
         await requestPermission();
       }
     };
@@ -73,41 +54,31 @@ export const CameraTool: React.FC<CameraViewProps> = ({
   };
 
   const handleAdd = () => {
-    // console.log('\ncurrent capturedImage in cameraTool.tsx/handleAdd:', capturedImage?.uri.split('-').pop());
     if (capturedImage) {
-      // store the current taken image
-      handleAddCapturedImage({
-        uri: capturedImage.uri,
-        base64: capturedImage.base64,
-        type: capturedImage.type,
+      // Navigate to edit screen with the captured photo
+      router.push({
+        pathname: '/(app)/edit-photo',
+        params: { 
+          imageUri: capturedImage.uri,
+          base64: capturedImage.base64
+        }
       });
-      resetCamera(); // Reset so the UI allows user to take another pic
     }
   };
 
   const handleContinue = () => {
-    // console.log('\ncurrent capturedImage in cameraTool.tsx/handleContinue:', capturedImage?.uri.split('-').pop());
-    const imageType = capturedImage?.type;
-    handleAddAllPendingImages();
-    if (imageType === 'selfie') {
-      getSelfieAnalysis(selfieImages);
-    } else if (imageType === 'products') {
-      getProductsAnalysis(productImages);
+    if (capturedImage) {
+      // Navigate to edit screen with the captured photo
+      router.push({
+        pathname: '/(app)/edit-photo',
+        params: { 
+          imageUri: capturedImage.uri,
+          base64: capturedImage.base64
+        }
+      });
     }
-    router.push(nextScreenRoute as any);
   };
 
-  ////////// debug
-  // useEffect(() => {
-  //   console.log('Total images:', capturedImages.length);
-  //   capturedImages.forEach((img, index) => {
-  //     console.log(`Image ${index + 1}:`, img.uri);
-  //   });
-  // }, [capturedImages]);
-
-  /////////////
-
-  // const capturedImagesCount = capturedImages.length + (capturedImage ? 1 : 0);
   return (
     <View style={styles.container}>
       {capturedImage ? (
@@ -121,10 +92,15 @@ export const CameraTool: React.FC<CameraViewProps> = ({
         </>
       ) : hasPermission ? (
         <>
-          <CameraView ref={cameraRef} style={styles.camera} facing={cameraFacing} />
-          <View style={styles.buttonContainer}>
-            <CameraButton onPress={handleCapture} disabled={isCapturing} />
-          </View>
+          <Camera 
+            ref={cameraRef} 
+            style={styles.camera} 
+            type={cameraFacing === 'front' ? Camera.Constants.Type.front : Camera.Constants.Type.back}
+          >
+            <View style={styles.buttonContainer}>
+              <CameraButton onPress={handleCapture} disabled={isCapturing} />
+            </View>
+          </Camera>
         </>
       ) : (
         <View style={styles.placeholderContainer}>

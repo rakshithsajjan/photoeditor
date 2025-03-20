@@ -29,5 +29,5 @@
 import { Redirect } from 'expo-router';
 
 export default function Index() {
-  return <Redirect href="/(screens)/onboarding/selfie" />;
+  return <Redirect href="/(app)/edit" />;
 }

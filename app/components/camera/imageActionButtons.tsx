@@ -19,7 +19,7 @@ export const ImageActionButtons: React.FC<ImageActionButtonsProps> = ({
       <Ionicons name="refresh" size={28} color="#FFF" />
     </TouchableOpacity>
     {/* add */}
-    <TouchableOpacity style={styles.button} onPress={onRetake}>
+    <TouchableOpacity style={styles.button} onPress={onAdd}>
       <Ionicons name="add" size={28} color="#FFF" />
     </TouchableOpacity>
     {/* continue */}

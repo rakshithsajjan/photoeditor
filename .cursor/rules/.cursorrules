@@ -31,3 +31,9 @@ Best Practices:
 - Follow React Native's Threading Model: Be aware of how React Native handles threading to ensure smooth UI performance.
 - Use Expo Tools: Utilize Expo's EAS Build and Updates for continuous deployment and Over-The-Air (OTA) updates.
 - Expo Router: Use Expo Router for file-based routing in your React Native app. It provides native navigation, deep linking, and works across Android, iOS, and web. Refer to the official documentation for setup and usage: https://docs.expo.dev/router/introduction/
+
+
+
+model: 'gemini-2.0-flash-exp-image-generation', is the correct model for image generation and image editing. 
+
+Check prevapp.txt for implementation of things in an app which works(the code of the previous app).  
